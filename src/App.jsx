@@ -18,12 +18,18 @@ function App() {
   console.log(url);
 
   useEffect(() => {
-    apiTesting();
+    fetchApiConfig();
   }, []);
-  const apiTesting = () => {
-    fetchDataFromApi("/movie/popular").then((data) => {
+
+  const fetchApiConfig = () => {
+    fetchDataFromApi("/configuration").then((data) => {
       // console.log(data);
-      dispatch(getApiConfiguration(data));
+      const url = {
+        backdrop: data.images.secure_base_url + "original",
+        poster: data.images.secure_base_url + "original",
+        profile: data.images.secure_base_url + "original",
+      };
+      dispatch(getApiConfiguration(url));
     });
   };
   return (
@@ -33,7 +39,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/:mediaType/:id" element={<Deatils />} />
-          <Route path="/:search/:query" element={<SearchResults />} />
+          <Route path="/search/:query" element={<SearchResults />} />
           <Route path="/explore/:mediaType" element={<Explore />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
